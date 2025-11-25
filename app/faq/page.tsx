@@ -273,7 +273,6 @@ export default function FAQ() {
           </div>
         </div>
       </div>
-      </div>
 
       {/* Footer */}
       <Footer />
