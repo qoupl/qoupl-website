@@ -81,17 +81,20 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="min-h-screen px-4 py-8 flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ type: "spring", duration: 0.5 }}
+                className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl sm:rounded-3xl shadow-2xl my-8"
+                style={{ maxHeight: 'calc(100vh - 4rem)' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
               {/* Gradient Header */}
-              <div className="relative bg-gradient-to-br from-[#a855f7] to-[#ec4899] p-8 text-white">
+              <div className="relative bg-gradient-to-br from-[#a855f7] to-[#ec4899] p-5 sm:p-8 text-white rounded-t-2xl sm:rounded-t-3xl">
                 {/* Close Button */}
                 <button
                   onClick={onClose}
@@ -121,8 +124,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   transition={{ delay: 0.2 }}
                   className="relative z-10"
                 >
-                  <h2 className="text-3xl font-bold mb-2 mt-8">Find Your Match</h2>
-                  <p className="text-white/90 text-sm">
+                  <h2 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2 mt-5 sm:mt-8">Find Your Match</h2>
+                  <p className="text-white/90 text-xs sm:text-sm">
                     Join thousands finding love through qoupl
                   </p>
                 </motion.div>
@@ -134,9 +137,9 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               </div>
 
               {/* Form Content */}
-              <div className="p-8">
+              <div className="p-4 sm:p-8">
                 {!isSubmitted ? (
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-5">
                     {/* Error Message */}
                     {error && (
                       <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm">
@@ -145,18 +148,18 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     )}
                     {/* Name Field */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                         Full Name *
                       </label>
                       <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-gray-400" />
                         <input
                           type="text"
                           name="name"
                           required
                           value={formData.name}
                           onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="Enter your full name"
                         />
                       </div>
@@ -164,18 +167,18 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
                     {/* Email Field */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                         Email Address *
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-gray-400" />
                         <input
                           type="email"
                           name="email"
                           required
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="your@email.com"
                         />
                       </div>
@@ -183,28 +186,28 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
                     {/* Phone Field */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                         Phone Number *
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-gray-400" />
                         <input
                           type="tel"
                           name="phone"
                           required
                           value={formData.phone}
                           onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="+91 98765 43210"
                         />
                       </div>
                     </div>
 
                     {/* Gender & Age Row */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-2 sm:gap-4">
                       {/* Gender */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                           Gender *
                         </label>
                         <select
@@ -212,7 +215,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           required
                           value={formData.gender}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full px-2 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                         >
                           <option value="">Select</option>
                           <option value="male">Male</option>
@@ -223,8 +226,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
                       {/* Age */}
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Age * (18-25 only)
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
+                          Age * (18-25)
                         </label>
                         <input
                           type="number"
@@ -234,7 +237,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                           max="25"
                           value={formData.age}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full px-2 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                           placeholder="21"
                         />
                       </div>
@@ -242,17 +245,17 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
 
                     {/* Looking For */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                         Looking For *
                       </label>
                       <div className="relative">
-                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-gray-400" />
                         <select
                           name="lookingFor"
                           required
                           value={formData.lookingFor}
                           onChange={handleChange}
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                          className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-[#a855f7] focus:border-transparent outline-none transition-all bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                         >
                           <option value="">Select preference</option>
                           <option value="male">Male</option>
@@ -266,7 +269,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-6 text-lg font-semibold bg-gradient-to-r from-[#a855f7] to-[#ec4899] hover:from-[#9333ea] hover:to-[#db2777] text-white rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full py-3 sm:py-6 text-base sm:text-lg font-semibold bg-gradient-to-r from-[#a855f7] to-[#ec4899] hover:from-[#9333ea] hover:to-[#db2777] text-white rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center gap-2">
@@ -414,7 +417,9 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                   </motion.div>
                 )}
               </div>
+                </div>
             </motion.div>
+            </div>
           </div>
         </>
       )}

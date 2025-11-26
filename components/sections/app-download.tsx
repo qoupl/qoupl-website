@@ -164,7 +164,7 @@ export default function AppDownload() {
                 className="absolute -left-8 top-12 w-32 h-56 rounded-3xl overflow-hidden shadow-xl border-4 border-gray-800 dark:border-gray-700 opacity-70"
               >
                 <Image
-                  src="/ardy-arjun-fQtnMrW1NAQ-unsplash.jpg"
+                  src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
                   alt="qoupl preview"
                   fill
                   className="object-cover"
@@ -184,7 +184,7 @@ export default function AppDownload() {
                 className="absolute -right-8 bottom-12 w-32 h-56 rounded-3xl overflow-hidden shadow-xl border-4 border-gray-800 dark:border-gray-700 opacity-70"
               >
                 <Image
-                  src="/jakob-owens-lkMJcGDZLVs-unsplash.jpg"
+                  src="/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg"
                   alt="qoupl preview"
                   fill
                   className="object-cover"

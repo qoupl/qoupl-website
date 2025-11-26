@@ -70,8 +70,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       transition={{ duration: 0.8, ease: "easeInOut" }}
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-white overflow-hidden"
     >
-      {/* Left Half - Women with Smooth Crossfade */}
-      <div className="absolute left-0 top-0 bottom-0 w-1/2 overflow-hidden">
+      {/* Left Half - Women with Smooth Crossfade - HIDDEN ON MOBILE/TABLET */}
+      <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-1/2 overflow-hidden">
         {womenImages.map((image, index) => (
           <motion.div
             key={`woman-${index}`}
@@ -103,8 +103,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         ))}
       </div>
 
-      {/* Right Half - Men with Smooth Crossfade */}
-      <div className="absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden">
+      {/* Right Half - Men with Smooth Crossfade - HIDDEN ON MOBILE/TABLET */}
+      <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden">
         {menImages.map((image, index) => (
           <motion.div
             key={`man-${index}`}
@@ -136,8 +136,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         ))}
       </div>
 
-      {/* Center White Fade Overlay - Creates clean separation */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" style={{ width: '100%' }} />
+      {/* Center White Fade Overlay - Creates clean separation - HIDDEN ON MOBILE/TABLET */}
+      <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
 
       {/* Logo Container - Much Bigger */}
       <div className="relative w-[600px] h-[300px] max-w-[90vw] z-10">

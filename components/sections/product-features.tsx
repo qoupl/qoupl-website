@@ -16,7 +16,7 @@ const features = [
       "Values-based matching",
       "Learning preferences",
     ],
-    image: "/ethan-robertson-gWzGqPw2ODY-unsplash.jpg",
+    image: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
     color: "from-pink-500 to-rose-500",
   },
   {
@@ -30,7 +30,7 @@ const features = [
       "Encrypted messaging",
       "Background checks",
     ],
-    image: "/albert-dera-ILip77SbmOE-unsplash.jpg",
+    image: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
     color: "from-purple-500 to-indigo-500",
   },
   {
@@ -44,7 +44,7 @@ const features = [
       "Meaningful connections",
       "Instant notifications",
     ],
-    image: "/andre-sebastian-3_I3GXWldEw-unsplash.jpg",
+    image: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
     color: "from-violet-500 to-purple-500",
   },
 ];

@@ -15,7 +15,7 @@ export default function Hero() {
       <div className="absolute inset-0 opacity-10 dark:opacity-5">
         <div className="absolute top-20 left-10 w-64 h-80 rounded-3xl overflow-hidden rotate-12">
           <Image
-            src="/jonathan-borba-VX2nrLhq4h4-unsplash.jpg"
+            src="/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg"
             alt="Background"
             fill
             className="object-cover"
@@ -23,7 +23,7 @@ export default function Hero() {
         </div>
         <div className="absolute bottom-20 right-10 w-64 h-80 rounded-3xl overflow-hidden -rotate-12">
           <Image
-            src="/carly-rae-hobbins-zNHOIzjJiyA-unsplash.jpg"
+            src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
             alt="Background"
             fill
             className="object-cover"
@@ -95,10 +95,10 @@ export default function Hero() {
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
                   {[
-                    "/alex-suprun-Rvu_XqWgp80-unsplash.jpg",
-                    "/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
-                    "/nonresident-c4Gt0PtW7Ec-unsplash.jpg",
-                    "/anthony-tran-LMcvt8Rew4c-unsplash.jpg",
+                    "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
+                    "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
+                    "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
+                    "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
                   ].map((img, i) => (
                     <div
                       key={i}
@@ -126,9 +126,9 @@ export default function Hero() {
               className="grid grid-cols-3 gap-4 max-w-3xl mx-auto"
             >
               {[
-                "/jonathan-borba-VX2nrLhq4h4-unsplash.jpg",
-                "/carly-rae-hobbins-zNHOIzjJiyA-unsplash.jpg",
-                "/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+                "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+                "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
+                "/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg",
               ].map((img, i) => (
                 <motion.div
                   key={i}

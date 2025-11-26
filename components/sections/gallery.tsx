@@ -1,220 +1,59 @@
 "use client";
 
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { Heart, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Heart } from "lucide-react";
 
 const galleryImages = [
   {
     src: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
     alt: "Happy couple outdoors",
-    delay: 0,
+    title: "Sarah & Raj",
+    story: "Met through qoupl, now planning their future together"
   },
   {
     src: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
     alt: "Couple enjoying time together",
-    delay: 0.15,
+    title: "Priya & Arjun",
+    story: "Found love in unexpected places"
   },
   {
     src: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
     alt: "Romantic moment",
-    delay: 0.3,
+    title: "Anjali & Vikram",
+    story: "Book lovers united by their passion"
   },
   {
     src: "/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg",
     alt: "Couple smiling",
-    delay: 0.45,
+    title: "Neha & Karan",
+    story: "Perfect match from day one"
   },
   {
     src: "/images/coupl/young-guy-with-packets-hugging-happy-lady-sitting-stone (1).jpg",
     alt: "Dating couple",
-    delay: 0.6,
-  },
-  {
-    src: "/images/women/Gemini_Generated_Image_34su0h34su0h34su.png",
-    alt: "Love and connection",
-    delay: 0.75,
+    title: "Maya & Rohan",
+    story: "Adventure seekers finding love together"
   },
 ];
 
-// Enhanced Gallery Card Component
-function GalleryCard({ image, index, parallaxY }: { image: typeof galleryImages[0]; index: number; parallaxY: any }) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{
-        delay: image.delay * 0.3,
-        duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94], // Smooth easeOutQuad
-      }}
-      style={{ y: parallaxY }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group relative"
-    >
-      <motion.div
-        className="relative overflow-hidden rounded-3xl shadow-2xl cursor-pointer bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-900"
-        whileHover={{
-          y: -12,
-          transition: { duration: 0.3, ease: "easeOut" }
-        }}
-      >
-        {/* Image Container */}
-        <div className="relative aspect-[4/5] overflow-hidden">
-          <motion.div
-            animate={{
-              scale: isHovered ? 1.1 : 1,
-            }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="w-full h-full"
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-          </motion.div>
-
-          {/* Gradient Overlay - Always subtle, darker on hover */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-            animate={{
-              opacity: isHovered ? 1 : 0.7,
-            }}
-            transition={{ duration: 0.3 }}
-          />
-
-          {/* Purple accent overlay on hover */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-primary/40 via-purple-500/20 to-transparent"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-            }}
-            transition={{ duration: 0.4 }}
-          />
-
-          {/* Heart Icon - Animated entrance */}
-          <motion.div
-            className="absolute top-6 right-6"
-            initial={{ scale: 0, rotate: -90 }}
-            animate={{
-              scale: isHovered ? 1 : 0,
-              rotate: isHovered ? 0 : -90,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-            }}
-          >
-            <motion.div
-              className="w-12 h-12 rounded-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md flex items-center justify-center shadow-2xl"
-              animate={{
-                boxShadow: isHovered
-                  ? "0 10px 40px rgba(168, 85, 247, 0.4)"
-                  : "0 4px 20px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <motion.div
-                animate={{
-                  scale: isHovered ? [1, 1.2, 1] : 1,
-                }}
-                transition={{
-                  duration: 1,
-                  repeat: isHovered ? Infinity : 0,
-                  ease: "easeInOut",
-                }}
-              >
-                <Heart className="h-6 w-6 text-primary fill-primary" />
-              </motion.div>
-            </motion.div>
-          </motion.div>
-
-          {/* Sparkles - Bottom left */}
-          <motion.div
-            className="absolute bottom-6 left-6"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-              scale: isHovered ? 1 : 0,
-              rotate: isHovered ? [0, 15, -15, 0] : 0,
-            }}
-            transition={{
-              opacity: { duration: 0.3 },
-              scale: { type: "spring", stiffness: 200 },
-              rotate: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <div className="p-2 rounded-full bg-white/20 backdrop-blur-sm">
-              <Sparkles className="h-6 w-6 text-white drop-shadow-lg" />
-            </div>
-          </motion.div>
-
-          {/* Animated border shine */}
-          <motion.div
-            className="absolute inset-0 rounded-3xl"
-            animate={{
-              boxShadow: isHovered
-                ? "inset 0 0 60px rgba(168, 85, 247, 0.3), 0 0 40px rgba(168, 85, 247, 0.2)"
-                : "inset 0 0 0px rgba(168, 85, 247, 0)",
-            }}
-            transition={{ duration: 0.4 }}
-          />
-
-          {/* Sweeping light effect */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-            animate={{
-              x: isHovered ? ["0%", "100%"] : "-100%",
-            }}
-            transition={{
-              duration: 1,
-              ease: "easeInOut",
-            }}
-            style={{
-              transform: "skewX(-20deg)",
-            }}
-          />
-        </div>
-
-        {/* Bottom gradient bar - appears on hover */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-purple-500 to-primary"
-          initial={{ scaleX: 0 }}
-          animate={{
-            scaleX: isHovered ? 1 : 0,
-          }}
-          transition={{ duration: 0.4 }}
-          style={{ transformOrigin: "left" }}
-        />
-      </motion.div>
-    </motion.div>
-  );
-}
-
 export default function Gallery() {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+  // Auto-play carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prev) => (prev + 1) % galleryImages.length);
+    }, 4000); // Change every 4 seconds
+
+    return () => clearInterval(timer);
+  }, [currentIndex]);
 
   return (
-    <section
-      ref={containerRef}
-      className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background"
-    >
+    <section className="py-16 md:py-24 relative overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
       {/* Animated Background Elements */}
       <motion.div
         animate={{
@@ -248,14 +87,14 @@ export default function Gallery() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <motion.div
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ delay: 0.1, type: "spring" }}
+            transition={{ delay: 0.2, type: "spring" }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6"
           >
             <Heart className="h-4 w-4 fill-primary" />
@@ -269,35 +108,222 @@ export default function Gallery() {
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of couples who found their perfect match through
-            qoupl
+            Join thousands of couples who found their perfect match through qoupl
           </p>
         </motion.div>
 
-        {/* Enhanced Gallery with Smooth Animations */}
-        <div className="max-w-6xl mx-auto">
-          {/* Row 1 - 3 images */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {galleryImages.slice(0, 3).map((image, index) => (
-              <GalleryCard
-                key={index}
-                image={image}
-                index={index}
-                parallaxY={index % 2 === 0 ? y1 : y2}
-              />
-            ))}
-          </div>
+        {/* Enhanced 3D Carousel Container */}
+        <div className="max-w-7xl mx-auto relative">
+          <div 
+            className="relative h-[550px] md:h-[650px] flex items-center justify-center"
+            style={{
+              perspective: '1500px',
+              perspectiveOrigin: 'center center',
+            }}
+          >
+            <AnimatePresence initial={false} mode="popLayout" custom={direction}>
+              {galleryImages.map((image, index) => {
+                // Calculate position relative to current
+                const offset = (index - currentIndex + galleryImages.length) % galleryImages.length;
+                
+                // Only render cards that are close to current
+                if (offset > 2 && offset < galleryImages.length - 2) return null;
+                
+                // Determine stack position
+                let x = 0;
+                let z = 0;
+                let rotateY = 0;
+                let scale = 1;
+                let opacity = 1;
+                let zIndex = 0;
+                
+                if (offset === 0) {
+                  // Center card
+                  x = 0;
+                  z = 0;
+                  rotateY = 0;
+                  scale = 1;
+                  opacity = 1;
+                  zIndex = 50;
+                } else if (offset === 1) {
+                  // Right card
+                  x = 200;
+                  z = -200;
+                  rotateY = -45;
+                  scale = 0.75;
+                  opacity = 0.5;
+                  zIndex = 40;
+                } else if (offset === 2) {
+                  // Far right card
+                  x = 350;
+                  z = -400;
+                  rotateY = -60;
+                  scale = 0.6;
+                  opacity = 0.3;
+                  zIndex = 30;
+                } else if (offset === galleryImages.length - 1) {
+                  // Left card
+                  x = -200;
+                  z = -200;
+                  rotateY = 45;
+                  scale = 0.75;
+                  opacity = 0.5;
+                  zIndex = 40;
+                } else if (offset === galleryImages.length - 2) {
+                  // Far left card
+                  x = -350;
+                  z = -400;
+                  rotateY = 60;
+                  scale = 0.6;
+                  opacity = 0.3;
+                  zIndex = 30;
+                }
 
-          {/* Row 2 - 3 images */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {galleryImages.slice(3, 6).map((image, index) => (
-              <GalleryCard
-                key={index + 3}
-                image={image}
-                index={index + 3}
-                parallaxY={index % 2 === 0 ? y2 : y1}
-              />
-            ))}
+                return (
+                  <motion.div
+                    key={index}
+                    className="absolute"
+                    initial={{ 
+                      x: direction > 0 ? 500 : -500,
+                      opacity: 0,
+                      scale: 0.5,
+                      rotateY: direction > 0 ? -90 : 90,
+                    }}
+                    animate={{
+                      x,
+                      scale,
+                      rotateY,
+                      opacity,
+                      zIndex,
+                      z,
+                    }}
+                    exit={{
+                      x: direction > 0 ? -500 : 500,
+                      opacity: 0,
+                      scale: 0.5,
+                      rotateY: direction > 0 ? 90 : -90,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 30,
+                      opacity: { duration: 0.4 },
+                    }}
+                    style={{
+                      transformStyle: 'preserve-3d',
+                    }}
+                  >
+                    <motion.div
+                      className="relative w-[280px] md:w-[350px] lg:w-[420px] aspect-[3/4] rounded-3xl overflow-hidden"
+                      style={{
+                        transformStyle: 'preserve-3d',
+                        boxShadow: offset === 0 
+                          ? '0 50px 100px -20px rgba(0, 0, 0, 0.5), 0 30px 60px -30px rgba(168, 85, 247, 0.4)'
+                          : '0 20px 40px -10px rgba(0, 0, 0, 0.3)',
+                      }}
+                    >
+                      {/* Border with 3D effect */}
+                      <div className={`absolute inset-0 rounded-3xl ${
+                        offset === 0 
+                          ? 'border-4 border-white dark:border-white/90' 
+                          : 'border-2 border-white/60 dark:border-white/30'
+                      }`} />
+
+                      {/* Image */}
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 280px, (max-width: 1024px) 350px, 420px"
+                        priority={index === 0}
+                        style={{
+                          filter: offset === 0 ? 'grayscale(0%) brightness(1)' : 'grayscale(100%) brightness(0.7)',
+                          transition: 'filter 0.5s ease',
+                        }}
+                      />
+
+                      {/* Gradient Overlay - Stronger on side cards */}
+                      <div 
+                        className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+                        style={{
+                          opacity: offset === 0 ? 0.6 : 0.8,
+                        }}
+                      />
+
+                      {/* Content - Only visible on center card */}
+                      {offset === 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 30 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 30 }}
+                          transition={{ delay: 0.3, duration: 0.5 }}
+                          className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white z-10"
+                        >
+                          {/* Animated Heart */}
+                          <motion.div
+                            className="absolute top-6 right-6"
+                            initial={{ scale: 0 }}
+                            animate={{ 
+                              scale: [1, 1.3, 1],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          >
+                            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl border border-white/30">
+                              <Heart className="h-7 w-7 text-white fill-white" />
+                            </div>
+                          </motion.div>
+
+                          <h3 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{image.title}</h3>
+                          <p className="text-white/95 text-base md:text-lg drop-shadow-md">{image.story}</p>
+                          
+                          {/* Beta User Badge */}
+                          <motion.div 
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 }}
+                            className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/30 to-purple-600/30 backdrop-blur-md border border-white/30"
+                          >
+                            <span className="text-sm font-semibold">Beta Success Story</span>
+                          </motion.div>
+                        </motion.div>
+                      )}
+
+                      {/* Shine Effect on Center Card */}
+                      {offset === 0 && (
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                          animate={{
+                            x: ['-100%', '200%'],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatDelay: 3,
+                            ease: "easeInOut",
+                          }}
+                        />
+                      )}
+
+                      {/* 3D Edge Highlight */}
+                      <div 
+                        className="absolute inset-0 rounded-3xl"
+                        style={{
+                          background: offset === 0 
+                            ? 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(255,255,255,0.1) 100%)'
+                            : 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%)',
+                          pointerEvents: 'none',
+                        }}
+                      />
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -306,12 +332,12 @@ export default function Gallery() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
-          transition={{ delay: 0.2, duration: 0.3 }}
-          className="text-center mt-20 relative z-30"
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="text-center mt-16 relative z-30"
         >
           <motion.p
             whileHover={{ scale: 1.05 }}
-            className="text-lg text-muted-foreground"
+            className="text-lg md:text-xl text-muted-foreground"
           >
             Be part of something beautiful.{" "}
             <span className="text-primary font-semibold">

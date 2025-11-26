@@ -1,204 +1,301 @@
 "use client";
 
-import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Heart, Shield, Zap, Users, MessageCircle, Lightbulb, MapPin, Sparkles, Check, Lock, Eye, Star, Filter, Bell, Phone, Camera } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowLeft, Heart, Shield, Zap, MessageCircle, Sparkles, Check, Lock, Eye, Star, Filter, Bell, Users, MapPin, Camera, Phone } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import WaitlistModal from "@/components/waitlist-modal";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/sections/footer";
 
-const mainFeatures = [
+const featureCategories = [
   {
+    id: "matching",
+    title: "Smart Matching",
     icon: Sparkles,
-    title: "AI-Powered Smart Matching",
-    description: "Our advanced AI algorithm analyzes personality traits, interests, values, and behavior to suggest highly compatible matches tailored just for you.",
-    features: ["Compatibility score", "Personalized suggestions", "Learning algorithm", "Values-based matching"],
     color: "from-pink-500 to-rose-500",
-    image: "/ethan-robertson-gWzGqPw2ODY-unsplash.jpg"
+    image: "/qoupl/3.png",
+    coupleImage: "/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg",
+    features: [
+      { icon: Sparkles, title: "AI-Powered Algorithm", description: "Advanced compatibility analysis based on personality, interests, and values" },
+      { icon: Star, title: "Compatibility Score", description: "See how well you match with potential partners before connecting" },
+      { icon: Heart, title: "Learning Preferences", description: "Algorithm improves as you use the app, understanding your type better" },
+      { icon: Filter, title: "Smart Filters", description: "Filter by age, location, education, lifestyle preferences and more" },
+    ]
   },
   {
+    id: "safety",
+    title: "Safety & Trust",
     icon: Shield,
-    title: "Safety & Verification",
-    description: "Multi-layered security with photo verification, AI moderation, and 24/7 human review to ensure a safe dating environment.",
-    features: ["Photo verification", "ID verification", "AI content moderation", "Background checks"],
     color: "from-purple-500 to-indigo-500",
-    image: "/albert-dera-ILip77SbmOE-unsplash.jpg"
+    image: "/qoupl/1.png",
+    coupleImage: "/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg",
+    features: [
+      { icon: Camera, title: "Photo Verification", description: "Real-time selfie verification to confirm identity and get verified badge" },
+      { icon: Shield, title: "ID Verification", description: "Optional government ID verification for enhanced trust" },
+      { icon: Lock, title: "End-to-End Encryption", description: "All messages encrypted to protect your privacy" },
+      { icon: Bell, title: "24/7 AI Moderation", description: "Automated and human review of content for safety" },
+    ]
   },
   {
+    id: "communication",
+    title: "Rich Communication",
     icon: MessageCircle,
-    title: "Smart Communication",
-    description: "AI-powered conversation starters, ice breakers, and real-time translation to help you connect meaningfully.",
-    features: ["Conversation starters", "Voice messages", "GIF & stickers", "Real-time translation"],
     color: "from-violet-500 to-purple-500",
-    image: "/andre-sebastian-3_I3GXWldEw-unsplash.jpg"
+    image: "/qoupl/4.png",
+    coupleImage: "/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg",
+    features: [
+      { icon: MessageCircle, title: "Smart Icebreakers", description: "AI-generated conversation starters tailored to each match" },
+      { icon: Camera, title: "Photo & Video Sharing", description: "Share moments with your matches securely" },
+      { icon: Phone, title: "Voice Messages", description: "Express yourself better with voice notes" },
+      { icon: Zap, title: "Real-time Chat", description: "Instant messaging with read receipts and typing indicators" },
+    ]
   },
   {
-    icon: Lightbulb,
-    title: "Smart Insights",
-    description: "Get personalized dating tips, profile insights, and compatibility analysis to improve your dating experience.",
-    features: ["Profile strength score", "Dating insights", "Compatibility tips", "Activity analytics"],
+    id: "experience",
+    title: "Premium Experience",
+    icon: Star,
     color: "from-blue-500 to-cyan-500",
-    image: "/anthony-tran-LMcvt8Rew4c-unsplash.jpg"
-  }
-];
-
-const additionalFeatures = [
-  { icon: Filter, title: "Advanced Filters", description: "Filter by age, location, education, lifestyle, and more" },
-  { icon: MapPin, title: "Location-Based", description: "Find matches near you with adjustable distance settings" },
-  { icon: Lock, title: "Privacy Controls", description: "Control who sees your profile and what information is visible" },
-  { icon: Eye, title: "Incognito Mode", description: "Browse profiles privately without appearing in search" },
-  { icon: Star, title: "Super Likes", description: "Stand out by showing extra interest to potential matches" },
-  { icon: Bell, title: "Smart Notifications", description: "Get notified about new matches, messages, and profile views" },
-  { icon: Heart, title: "Unlimited Likes", description: "Like as many profiles as you want with premium" },
-  { icon: Users, title: "See Who Likes You", description: "Know who's interested before you swipe" },
-  { icon: Phone, title: "Date Planning", description: "Built-in tools to plan and coordinate your first date" },
-  { icon: Camera, title: "Photo Sharing", description: "Share moments through photos securely with your matches" },
-  { icon: Zap, title: "Boost Your Profile", description: "Get more visibility and appear at the top of search results" },
-  { icon: Check, title: "Read Receipts", description: "Know when your messages have been read" }
-];
-
-const premiumFeatures = [
-  "Unlimited likes and super likes",
-  "See who liked you before matching",
-  "Advanced filters for precise matching",
-  "Rewind last swipe if you change your mind",
-  "5 Super Likes per day",
-  "1 Boost per month to increase visibility",
-  "Incognito mode for private browsing",
-  "Ad-free experience",
-  "Priority customer support",
-  "Travel mode to match anywhere in the world",
-  "Read receipts on messages",
-  "Extended profile with more photos"
-];
-
-const safetyFeatures = [
-  { icon: Shield, title: "Photo Verification", description: "Verify your identity with a real-time selfie to get a verified badge" },
-  { icon: Eye, title: "Profile Moderation", description: "AI and human reviewers check all profiles for authenticity and safety" },
-  { icon: Lock, title: "Encrypted Messaging", description: "End-to-end encryption keeps your conversations private" },
-  { icon: Bell, title: "Instant Reporting", description: "Report suspicious behavior with one tap, reviewed within 24 hours" },
-  { icon: Phone, title: "Emergency SOS", description: "Quick access to emergency contacts and safety resources" },
-  { icon: Users, title: "Block & Unmatch", description: "Control who can see and contact you at any time" }
+    image: "/qoupl/6.png",
+    coupleImage: "/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg",
+    features: [
+      { icon: Eye, title: "See Who Likes You", description: "View all people who liked your profile instantly" },
+      { icon: Zap, title: "Profile Boost", description: "Get more visibility by appearing at the top of search results" },
+      { icon: MapPin, title: "Travel Mode", description: "Match with people in any city before you visit" },
+      { icon: Heart, title: "Unlimited Likes", description: "Like as many profiles as you want without restrictions" },
+    ]
+  },
 ];
 
 export default function Features() {
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("matching");
+
+  const activeCategory = featureCategories.find(cat => cat.id === activeTab);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20 py-20">
-        <div className="container mx-auto px-4">
+      
+      {/* Hero Section - Modern Split Design */}
+      <section className="relative overflow-hidden pt-24 pb-12 md:pt-32 md:pb-16">
+        {/* Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F7] via-purple-50/30 to-background dark:from-[#0F0A1A] dark:via-purple-950/20 dark:to-background" />
+        
+        {/* Animated gradient mesh */}
+        <motion.div
+          animate={{
+            backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 50%)',
+            backgroundSize: '200% 200%',
+          }}
+        />
+
+        <div className="container mx-auto px-4 relative z-10">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-primary hover:underline mb-8"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors font-medium"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl"
-          >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-              Powerful{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Features
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-              Everything you need to find meaningful connections, all in one beautifully designed app.
-            </p>
-          </motion.div>
-        </div>
+          <div className="text-center max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-purple-600/10 text-primary mb-6 backdrop-blur-sm border border-primary/20"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span className="text-sm font-semibold">Everything You Need</span>
+              </motion.div>
 
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      </section>
-
-      {/* Main Features */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Core{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Features
-              </span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Cutting-edge technology meets human connection
-            </p>
-          </motion.div>
-
-          <div className="space-y-24">
-            {mainFeatures.map((feature, index) => {
-              const Icon = feature.icon;
-              const isEven = index % 2 === 0;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} gap-12 items-center`}
-                >
-                  {/* Image */}
-                  <div className="lg:w-1/2">
-                    <div className="relative h-96 rounded-3xl overflow-hidden shadow-2xl">
-                      <Image
-                        src={feature.image}
-                        alt={feature.title}
-                        fill
-                        className="object-cover"
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-20`} />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="lg:w-1/2 space-y-6">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center`}>
-                      <Icon className="h-8 w-8 text-white" />
-                    </div>
-                    <h3 className="text-3xl md:text-4xl font-bold">{feature.title}</h3>
-                    <p className="text-lg text-muted-foreground leading-relaxed">
-                      {feature.description}
-                    </p>
-                    <ul className="space-y-3">
-                      {feature.features.map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3">
-                          <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center flex-shrink-0`}>
-                            <Check className="h-4 w-4 text-white" />
-                          </div>
-                          <span className="text-muted-foreground">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </motion.div>
-              );
-            })}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight">
+                Features That{" "}
+                <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  Make Dating Better
+                </span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+                Discover intelligent features designed to help you find meaningful connections 
+                faster, safer, and more authentically than ever before.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Additional Features Grid */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-purple-500/5">
-        <div className="container mx-auto px-4 max-w-6xl">
+      {/* Interactive Feature Tabs */}
+      <section className="py-12 md:py-16 bg-background">
+        <div className="container mx-auto px-4">
+          {/* Tab Navigation */}
+          <div className="max-w-5xl mx-auto mb-12">
+            <div className="flex flex-wrap justify-center gap-3">
+              {featureCategories.map((category) => {
+                const Icon = category.icon;
+                const isActive = activeTab === category.id;
+                return (
+                  <motion.button
+                    key={category.id}
+                    onClick={() => setActiveTab(category.id)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      isActive
+                        ? `bg-gradient-to-r ${category.color} text-white shadow-lg`
+                        : 'bg-card border-2 border-border hover:border-primary/50 text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{category.title}</span>
+                  </motion.button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Feature Content */}
+          <AnimatePresence mode="wait">
+            {activeCategory && (
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="max-w-7xl mx-auto"
+              >
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Phone Mockup */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
+                    className="relative order-2 lg:order-1"
+                  >
+                    <div className="relative max-w-sm mx-auto">
+                      {/* Phone Frame */}
+                      <div className="relative aspect-[9/19] max-w-[320px] mx-auto">
+                        {/* Glowing effect */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${activeCategory.color} rounded-[3rem] blur-3xl opacity-30`} />
+                        
+                        {/* Phone container */}
+                        <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-[2.5rem] p-2 shadow-2xl border border-gray-700/50">
+                          {/* Screen */}
+                          <div className="relative bg-white dark:bg-gray-950 rounded-[2.2rem] overflow-hidden aspect-[9/19]">
+                            {/* Status bar notch */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[130px] h-[28px] bg-black rounded-b-3xl z-20" />
+                            
+                            {/* App screenshot */}
+                            <Image
+                              src={activeCategory.image}
+                              alt={activeCategory.title}
+                              fill
+                              className="object-cover"
+                              sizes="320px"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Floating couple image */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ 
+                          opacity: 1, 
+                          scale: 1,
+                          y: [0, -10, 0],
+                        }}
+                        transition={{
+                          opacity: { delay: 0.4 },
+                          scale: { delay: 0.4 },
+                          y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                        className="absolute -right-12 -bottom-8 w-48 h-60 rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-800 hidden lg:block"
+                      >
+                        <Image
+                          src={activeCategory.coupleImage}
+                          alt="Happy couple"
+                          fill
+                          className="object-cover"
+                          sizes="192px"
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-t ${activeCategory.color} opacity-20`} />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+
+                  {/* Features List */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
+                    className="space-y-6 order-1 lg:order-2"
+                  >
+                    {activeCategory.features.map((feature, index) => {
+                      const Icon = feature.icon;
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
+                          whileHover={{ x: 8, transition: { duration: 0.2 } }}
+                          className="group"
+                        >
+                          <div className="flex gap-4 p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg">
+                            {/* Icon */}
+                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${activeCategory.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                              <Icon className="h-7 w-7 text-white" />
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1">
+                              <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">
+                                {feature.title}
+                              </h3>
+                              <p className="text-muted-foreground leading-relaxed">
+                                {feature.description}
+                              </p>
+                            </div>
+
+                            {/* Check icon */}
+                            <div className="flex-shrink-0">
+                              <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${activeCategory.color} flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+                                <Check className="h-5 w-5 text-white" strokeWidth={3} />
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* All Features Grid - Comprehensive */}
+      <section className="py-16 md:py-24 bg-gradient-to-br from-primary/5 via-purple-500/5 to-background">
+        <div className="container mx-auto px-4 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -206,15 +303,27 @@ export default function Features() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              More Amazing{" "}
+              And Much{" "}
               <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Features
+                More
               </span>
             </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Discover all the tools and features that make qoupl the best dating app
+            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {additionalFeatures.map((feature, index) => {
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: MapPin, title: "Location-Based", description: "Find matches near you" },
+              { icon: Eye, title: "Incognito Mode", description: "Browse privately" },
+              { icon: Star, title: "Super Likes", description: "Show extra interest" },
+              { icon: Bell, title: "Smart Alerts", description: "Never miss a match" },
+              { icon: Users, title: "Activity Status", description: "See who's online now" },
+              { icon: Lock, title: "Privacy Controls", description: "Control your visibility" },
+              { icon: Phone, title: "Date Planning", description: "Plan dates together" },
+              { icon: Zap, title: "Instant Matching", description: "Real-time connections" },
+            ].map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <motion.div
@@ -223,14 +332,20 @@ export default function Features() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05, duration: 0.4 }}
-                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                  className="bg-card p-6 rounded-2xl border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="group"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                    <Icon className="h-6 w-6 text-primary" />
+                  <div className="h-full bg-card/80 backdrop-blur-sm p-6 rounded-2xl border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                      <Icon className="h-6 w-6 text-primary group-hover:text-white transition-colors duration-300" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
                 </motion.div>
               );
             })}
@@ -238,146 +353,101 @@ export default function Features() {
         </div>
       </section>
 
-      {/* Safety Features */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 max-w-6xl">
+      {/* CTA Section - Gradient */}
+      <section className="py-20 md:py-32 relative overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-600 to-pink-600" />
+        
+        {/* Animated overlay */}
+        <motion.div
+          animate={{
+            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: "linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)",
+            backgroundSize: "200% 200%"
+          }}
+        />
+
+        {/* Floating orbs */}
+        <motion.div
+          animate={{
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"
+        />
+
+        <div className="container mx-auto px-4 text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
-              <Shield className="h-5 w-5" />
-              <span className="font-semibold">Your Safety First</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Safety{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Features
-              </span>
+            <Heart className="h-16 w-16 text-white fill-white mx-auto mb-6" />
+            
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              Ready to Experience the Future of Dating?
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Multiple layers of protection to keep you safe while dating
+
+            <p className="text-xl md:text-2xl text-white/90 mb-12 leading-relaxed max-w-2xl mx-auto">
+              Join our waitlist and be among the first to experience these amazing features
             </p>
-          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {safetyFeatures.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="text-center p-6"
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mx-auto mb-4">
-                    <Icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Premium Features */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-purple-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-purple-950/20">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
-              <Star className="h-5 w-5 fill-primary" />
-              <span className="font-semibold">qoupl Plus</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Premium{" "}
-              <span className="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Features
-              </span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Upgrade to qoupl Plus for the ultimate dating experience
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="bg-card border-2 border-primary/20 rounded-3xl p-8 md:p-12"
-          >
-            <div className="grid md:grid-cols-2 gap-4">
-              {premiumFeatures.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
-                  className="flex items-center gap-3"
-                >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-4 w-4 text-white" />
-                  </div>
-                  <span className="text-muted-foreground">{feature}</span>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <button
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <motion.button
                 onClick={() => setIsWaitlistModalOpen(true)}
-                className="px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-10 py-5 bg-white text-primary rounded-full font-bold text-lg shadow-2xl hover:shadow-white/30 transition-all duration-300 group"
               >
-                Join Waitlist
-              </button>
-              <p className="mt-4 text-sm text-muted-foreground">
-                Be among the first to access premium features
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+                <span className="flex items-center gap-2">
+                  Join the Waitlist
+                  <Sparkles className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                </span>
+              </motion.button>
 
-      {/* CTA */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              Ready to Experience These Features?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Join the waitlist today and be the first to experience the future of dating
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => setIsWaitlistModalOpen(true)}
-                className="px-8 py-4 bg-primary text-white rounded-full font-bold text-lg hover:bg-primary/90 transition-all duration-300"
-              >
-                Join Waitlist
-              </button>
-              <Link
-                href="/community-guidelines"
-                className="px-8 py-4 border-2 border-primary text-primary rounded-full font-bold text-lg hover:bg-primary/10 transition-all duration-300"
-              >
-                Learn More
+              <Link href="/pricing">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-10 py-5 bg-transparent border-2 border-white text-white rounded-full font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300"
+                >
+                  View Pricing
+                </motion.button>
               </Link>
             </div>
+
+            {/* Social proof */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-12 flex items-center justify-center gap-8 text-white/80"
+            >
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                <span className="font-semibold">10,000+ Waiting</span>
+              </div>
+              <div className="w-px h-6 bg-white/20" />
+              <div className="flex items-center gap-2">
+                <Star className="h-5 w-5 fill-white" />
+                <span className="font-semibold">Premium Experience</span>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>

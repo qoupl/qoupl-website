@@ -61,18 +61,14 @@ export default function AboutUs() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      {/* Hero Section - Enhanced */}
-      <section ref={heroRef} className="relative overflow-hidden min-h-[90vh] flex items-center">
-        {/* Animated gradient background */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-purple-600/20 dark:from-purple-900/40 dark:via-pink-900/40 dark:to-purple-800/40"
-          style={{ y: heroY, opacity: heroOpacity }}
-        />
-
-        {/* Animated orbs */}
+      {/* Hero Section - Modern Bento Grid Design */}
+      <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24">
+        {/* Modern gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FFF5F7] via-purple-50/50 to-pink-50/30 dark:from-[#0F0A1A] dark:via-purple-950/30 dark:to-pink-950/20" />
+        
+        {/* Animated mesh gradient */}
         <motion.div
           animate={{
-            scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
@@ -80,103 +76,189 @@ export default function AboutUs() {
             repeat: Infinity,
             ease: "easeInOut"
           }}
-          className="absolute top-20 right-20 w-96 h-96 bg-primary/30 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-          className="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(168,85,247,0.15),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(236,72,153,0.15),transparent_50%)]"
         />
 
         <div className="container mx-auto px-4 relative z-10">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-primary hover:underline mb-8 backdrop-blur-sm bg-background/50 px-4 py-2 rounded-full"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-8 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Home
+            <span className="font-medium">Back to Home</span>
           </Link>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
+              className="lg:col-span-6 space-y-6"
             >
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 to-purple-600/10 text-primary backdrop-blur-sm border border-primary/20"
               >
                 <Sparkles className="h-4 w-4" />
                 <span className="text-sm font-semibold">Our Story</span>
               </motion.div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                Redefining{" "}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
+                Building the{" "}
                 <span className="bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Love
+                  Future
                 </span>{" "}
-                in the Digital Age
+                of Love
               </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-                We're on a mission to help people find meaningful connections through
-                the power of AI and authentic human interaction.
+              
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                qoupl is revolutionizing how people connect. Through advanced AI matching 
+                and a commitment to authentic relationships, we're creating a platform 
+                where meaningful connections happen naturally.
               </p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="flex flex-wrap gap-4 pt-4"
+              >
+                <div className="flex items-center gap-3 px-5 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
+                  <Users className="h-5 w-5 text-primary" />
+                  <span className="font-semibold text-foreground">10,000+ Waitlist</span>
+                </div>
+                <div className="flex items-center gap-3 px-5 py-3 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
+                  <Globe className="h-5 w-5 text-primary" />
+                  <span className="font-semibold text-foreground">Launching in India</span>
+                </div>
+              </motion.div>
             </motion.div>
 
-            {/* Image collage */}
+            {/* Right Bento Grid - Modern Image Layout */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              className="relative h-[600px] hidden lg:block"
+              className="lg:col-span-6"
             >
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-0 right-0 w-64 h-80 rounded-3xl overflow-hidden shadow-2xl"
-              >
-                <Image
-                  src="/albert-dera-ILip77SbmOE-unsplash.jpg"
-                  alt="Happy couple"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 20, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute bottom-0 left-0 w-64 h-80 rounded-3xl overflow-hidden shadow-2xl"
-              >
-                <Image
-                  src="/carly-rae-hobbins-zNHOIzjJiyA-unsplash.jpg"
-                  alt="Happy couple"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, -15, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-56 h-72 rounded-3xl overflow-hidden shadow-2xl z-10"
-              >
-                <Image
-                  src="/ethan-robertson-gWzGqPw2ODY-unsplash.jpg"
-                  alt="Happy couple"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
+              <div className="grid grid-cols-6 grid-rows-3 gap-3 md:gap-4 h-[500px] md:h-[600px]">
+                {/* Large card - Top left */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5, duration: 0.6 }}
+                  whileHover={{ scale: 1.05, zIndex: 10 }}
+                  className="col-span-4 row-span-2 relative rounded-3xl overflow-hidden shadow-xl group"
+                >
+                  <Image
+                    src="/images/coupl/hannah-skelly-_wQqLdsgr4I-unsplash.jpg"
+                    alt="Happy couple"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 70vw, 40vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.div>
+
+                {/* Small card - Top right */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  whileHover={{ scale: 1.05, zIndex: 10 }}
+                  className="col-span-2 row-span-1 relative rounded-2xl overflow-hidden shadow-lg group"
+                >
+                  <Image
+                    src="/images/coupl/boy-giving-piggy-back-ride-his-girlfriend.jpg"
+                    alt="Couple together"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 30vw, 20vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent" />
+                </motion.div>
+
+                {/* Medium card - Middle right */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                  whileHover={{ scale: 1.05, zIndex: 10 }}
+                  className="col-span-2 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group"
+                >
+                  <Image
+                    src="/images/coupl/young-couple-valentines-day-smiling-girl-hugged-smiling-guy-isolated-pink-background.jpg"
+                    alt="Smiling couple"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 30vw, 20vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-pink-600/20 to-transparent" />
+                </motion.div>
+
+                {/* Wide card - Bottom left */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8, duration: 0.6 }}
+                  whileHover={{ scale: 1.05, zIndex: 10 }}
+                  className="col-span-4 row-span-1 relative rounded-2xl overflow-hidden shadow-lg group"
+                >
+                  <Image
+                    src="/images/coupl/man-loving-her-wife-holding-open-book-front-bookshelf.jpg"
+                    alt="Book loving couple"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 70vw, 40vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-600/20 to-transparent" />
+                </motion.div>
+
+                {/* Floating badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1, type: "spring" }}
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
+                >
+                  <motion.div
+                    animate={{
+                      y: [0, -10, 0],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="relative"
+                  >
+                    {/* Glow effect */}
+                    <div className="absolute inset-0 bg-primary rounded-3xl blur-2xl opacity-40" />
+                    
+                    {/* Badge */}
+                    <div className="relative bg-white dark:bg-gray-900 rounded-3xl px-8 py-6 shadow-2xl border-4 border-primary/30">
+                      <div className="text-center">
+                        <motion.div
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          <Heart className="h-12 w-12 text-primary fill-primary mx-auto mb-2" />
+                        </motion.div>
+                        <div className="text-4xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                          10,000+
+                        </div>
+                        <div className="text-sm font-semibold text-muted-foreground">
+                          On Waitlist
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
