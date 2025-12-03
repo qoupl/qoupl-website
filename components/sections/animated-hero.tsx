@@ -1,36 +1,367 @@
 "use client";
 
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Heart } from "lucide-react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import WaitlistModal from "@/components/waitlist-modal";
 
-export default function AnimatedHero() {
-  const [animationStage, setAnimationStage] = useState(0);
+// All women images (10 images)
+const womenImages = [
+  "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
+  "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
+  "/images/women/Gemini_Generated_Image_1hrhq01hrhq01hrh.png",
+  "/images/women/Gemini_Generated_Image_34su0h34su0h34su.png",
+  "/images/women/Gemini_Generated_Image_6cx31l6cx31l6cx3.png",
+  "/images/women/Gemini_Generated_Image_civ506civ506civ5.png",
+  "/images/women/Gemini_Generated_Image_fe6txtfe6txtfe6t.png",
+  "/images/women/Gemini_Generated_Image_l957byl957byl957.png",
+  "/images/women/Gemini_Generated_Image_tyingytyingytyin.png",
+  "/images/women/Gemini_Generated_Image_v4k4z2v4k4z2v4k4.png",
+];
+
+// All men images (6 images)
+const menImages = [
+  "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
+  "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
+  "/images/men/dollar-gill-LmtUqlYRJO4-unsplash.jpg",
+  "/images/men/indian-student-goes-first-lesson.jpg",
+  "/images/men/medium-shot-man-with-paperwork.jpg",
+  "/images/men/mitchell-luo-ymo_yC_N_2o-unsplash.jpg",
+];
+
+// Combined array: 10 women + 6 men = 16 images
+const carouselImages = [...womenImages, ...menImages];
+
+// All images for infinite carousel (16 images)
+const allUserImages = [...womenImages, ...menImages];
+
+// Modern 2025 Floating Cards with Magnetic Effect
+function ModernFloatingCards() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [particlePositions, setParticlePositions] = useState<Array<{ initialX: number; initialY: number; animateX: number[]; animateY: number[]; duration: number; delay: number }>>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Generate particle positions only on client side to avoid hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+    const positions = Array.from({ length: 8 }, (_, i) => ({
+      initialX: Math.random() * 100 - 50,
+      initialY: Math.random() * 100 - 50,
+      animateX: [
+        Math.random() * 200 - 100,
+        Math.random() * 300 - 150,
+        Math.random() * 200 - 100,
+      ],
+      animateY: [
+        Math.random() * 200 - 100,
+        Math.random() * 300 - 150,
+        Math.random() * 200 - 100,
+      ],
+      duration: 4 + Math.random() * 2,
+      delay: i * 0.5,
+    }));
+    setParticlePositions(positions);
+  }, []);
+
+  // Mouse tracking for magnetic effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        setMousePosition({
+          x: (e.clientX - centerX) / (rect.width / 2),
+          y: (e.clientY - centerY) / (rect.height / 2),
+        });
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Auto-rotate cards
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % carouselImages.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Show 5 cards at a time in a floating formation
+  const visibleCards = 5;
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative h-[400px] md:h-[500px] lg:h-[700px] w-full flex items-center justify-center"
+      style={{
+        perspective: "1500px",
+        perspectiveOrigin: "center center",
+      }}
+    >
+      {/* Floating Cards */}
+      {carouselImages.slice(0, visibleCards).map((image, index) => {
+        const baseRotation = (index * 360) / visibleCards;
+        const timeOffset = activeIndex * 72; // 360 / 5 = 72 degrees per card
+        const rotation = baseRotation + timeOffset;
+
+        // Calculate position in 3D space (circular orbit)
+        const radius = 180;
+        const x = Math.cos((rotation * Math.PI) / 180) * radius;
+        const z = Math.sin((rotation * Math.PI) / 180) * radius;
+        const y = Math.sin(index * 0.8) * 40; // Vertical wave
+
+        // Magnetic effect - cards slightly follow mouse
+        const magneticX = mousePosition.x * 15;
+        const magneticY = mousePosition.y * 15;
+
+        // Scale based on Z position (closer = larger)
+        const depth = (z + radius) / (2 * radius);
+        const scale = 0.7 + depth * 0.3;
+
+        return (
+          <motion.div
+            key={`${image}-${index}`}
+            className="absolute cursor-pointer"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{
+              x: x + magneticX,
+              y: y + magneticY,
+              z: z,
+              rotateY: rotation + 90,
+              scale: scale,
+              opacity: 0.85 + depth * 0.15,
+            }}
+            transition={{
+              x: { type: "spring", stiffness: 50, damping: 15 },
+              y: { type: "spring", stiffness: 50, damping: 15 },
+              z: { type: "spring", stiffness: 50, damping: 15 },
+              rotateY: { duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] },
+              scale: { duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] },
+              opacity: { duration: 1.2 },
+            }}
+            whileHover={{
+              scale: scale * 1.1,
+              z: z + 50,
+              transition: { duration: 0.3 },
+            }}
+            onClick={() => setActiveIndex(index)}
+            style={{
+              transformStyle: "preserve-3d",
+              zIndex: Math.round(z + radius),
+            }}
+          >
+            {/* Modern Glass Card */}
+            <div
+              className="relative w-[280px] h-[400px] md:w-[320px] md:h-[460px] lg:w-[360px] lg:h-[520px] rounded-3xl overflow-hidden"
+              style={{
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(20px) saturate(180%)",
+                WebkitBackdropFilter: "blur(20px) saturate(180%)",
+                border: "1px solid rgba(255, 255, 255, 0.18)",
+                boxShadow: `
+                  0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                  0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                  ${depth > 0.5 ? "0 0 60px rgba(168, 85, 247, 0.3)" : "0 0 30px rgba(168, 85, 247, 0.15)"}
+                `,
+              }}
+            >
+              {/* Image */}
+              <Image
+                src={image}
+                alt={`Profile ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 240px, (max-width: 1024px) 280px, 300px"
+                priority={index < 2}
+              />
+
+              {/* Modern Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+              {/* Holographic Shimmer Effect */}
+              <motion.div
+                className="absolute inset-0 opacity-30"
+                style={{
+                  background: `linear-gradient(
+                    135deg,
+                    rgba(168, 85, 247, 0.3) 0%,
+                    rgba(236, 72, 153, 0.3) 50%,
+                    rgba(168, 85, 247, 0.3) 100%
+                  )`,
+                  backgroundSize: "200% 200%",
+                }}
+                animate={{
+                  backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+
+              {/* Glow Border */}
+              <motion.div
+                className="absolute inset-0 rounded-3xl"
+                animate={{
+                  boxShadow: [
+                    "inset 0 0 20px rgba(168, 85, 247, 0.2)",
+                    "inset 0 0 40px rgba(236, 72, 153, 0.3)",
+                    "inset 0 0 20px rgba(168, 85, 247, 0.2)",
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+
+              {/* Heart Badge - Only on front card */}
+              {depth > 0.7 && (
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+                  className="absolute top-4 right-4 bg-white/20 backdrop-blur-md rounded-full p-2.5 shadow-xl border border-white/30"
+                >
+                  <Heart className="w-5 h-5 text-white fill-white" />
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
+
+      {/* Floating Particles - Only render after mount to avoid hydration mismatch */}
+      {isMounted && particlePositions.map((particle, i) => (
+        <motion.div
+          key={`particle-${i}`}
+          className="absolute pointer-events-none"
+          initial={{
+            x: particle.initialX,
+            y: particle.initialY,
+            opacity: 0,
+          }}
+          animate={{
+            x: particle.animateX,
+            y: particle.animateY,
+            opacity: [0, 0.6, 0],
+            scale: [0.5, 1, 0.5],
+          }}
+          transition={{
+            duration: particle.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: particle.delay,
+          }}
+        >
+          <Heart className="w-3 h-3 text-primary/30 fill-primary/30" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+// Infinite Circular Carousel Component
+function InfiniteCircularCarousel() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const [centerIndex, setCenterIndex] = useState(0);
+  
+  // Duplicate images for seamless infinite loop (3 sets for smooth transition)
+  const duplicatedImages = [...allUserImages, ...allUserImages, ...allUserImages];
+  
+  // Calculate the distance to move (one set of images)
+  const imageWidth = 48; // w-12 = 48px (reduced from 64px)
+  const gap = 8; // gap-2 = 8px (reduced from 16px)
+  const setWidth = allUserImages.length * (imageWidth + gap);
+  const itemWidth = imageWidth + gap;
+
+  // Track center position
+  useEffect(() => {
+    const unsubscribe = x.on("change", (latest) => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const centerX = containerWidth / 2;
+        
+        // Calculate which image is at center
+        // Account for the negative x value (carousel moves left)
+        const relativeX = Math.abs(latest) % setWidth;
+        const imagePosition = centerX - relativeX;
+        const imageIndex = Math.round(imagePosition / itemWidth) % allUserImages.length;
+        
+        // Ensure positive index
+        const positiveIndex = imageIndex < 0 ? allUserImages.length + imageIndex : imageIndex;
+        setCenterIndex(positiveIndex);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [x, setWidth, itemWidth]);
+
+  return (
+    <div ref={containerRef} className="relative w-full overflow-hidden py-2">
+      <motion.div
+        className="flex gap-2"
+        style={{ x }}
+        animate={{
+          x: [0, -setWidth],
+        }}
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: 40,
+            ease: "linear",
+          },
+        }}
+      >
+        {duplicatedImages.map((img, index) => {
+          const imageIndex = index % allUserImages.length;
+          const isNearCenter = imageIndex === centerIndex;
+          
+          return (
+            <motion.div
+              key={`carousel-${index}`}
+              className={`flex-shrink-0 w-12 h-12 rounded-full overflow-hidden relative shadow-md transition-all duration-300 ${
+                isNearCenter ? 'scale-110' : ''
+              }`}
+              style={{
+                border: isNearCenter ? '3px solid #662D91' : '2px solid hsl(var(--background))',
+                boxShadow: isNearCenter ? '0 0 0 2px rgba(102, 45, 145, 0.2)' : undefined,
+              }}
+            >
+              <Image
+                src={img}
+                alt={`User ${index + 1}`}
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
+            </motion.div>
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+}
+
+export default function AnimatedHero() {
   const [showThemeToggle, setShowThemeToggle] = useState(true);
   const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
 
+  // Hide theme toggle on scroll
   useEffect(() => {
-    // Stage 0: Cards float in (0-0.4s)
-    const timer1 = setTimeout(() => setAnimationStage(1), 400);
-    // Stage 1: Cards settle (0.4-0.6s)
-    const timer2 = setTimeout(() => setAnimationStage(2), 600);
-    // Stage 2: Text appears (0.6-0.8s)
-    const timer3 = setTimeout(() => setAnimationStage(3), 800);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Hide theme toggle when navbar appears (after scrolling 50px)
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setShowThemeToggle(false);
@@ -39,150 +370,14 @@ export default function AnimatedHero() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    setMousePosition({
-      x: (clientX - centerX) / 50,
-      y: (clientY - centerY) / 50,
-    });
-  };
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#FFF5F7] dark:bg-[#0F0A1A]"
-      onMouseMove={handleMouseMove}
+      className="relative min-h-screen w-full flex flex-col overflow-hidden bg-white dark:bg-[#171717] pb-32 md:pb-36 lg:pb-24"
     >
-      {/* Modern Gradient Mesh Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Animated Gradient Orbs - Light Mode */}
-        <motion.div
-          className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-70 dark:opacity-0"
-          style={{
-            background: 'radial-gradient(circle, rgba(255, 107, 129, 0.4) 0%, rgba(255, 107, 129, 0) 70%)',
-            filter: 'blur(60px)',
-          }}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        <motion.div
-          className="absolute top-1/4 -right-40 w-[500px] h-[500px] rounded-full opacity-60 dark:opacity-0"
-          style={{
-            background: 'radial-gradient(circle, rgba(165, 89, 209, 0.4) 0%, rgba(165, 89, 209, 0) 70%)',
-            filter: 'blur(60px)',
-          }}
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-
-        <motion.div
-          className="absolute bottom-0 left-1/3 w-[550px] h-[550px] rounded-full opacity-50 dark:opacity-0"
-          style={{
-            background: 'radial-gradient(circle, rgba(255, 154, 141, 0.35) 0%, rgba(255, 154, 141, 0) 70%)',
-            filter: 'blur(70px)',
-          }}
-          animate={{
-            x: [0, 40, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-
-        {/* Animated Gradient Orbs - Dark Mode */}
-        <motion.div
-          className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-0 dark:opacity-40"
-          style={{
-            background: 'radial-gradient(circle, rgba(233, 30, 99, 0.3) 0%, rgba(233, 30, 99, 0) 70%)',
-            filter: 'blur(80px)',
-          }}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        <motion.div
-          className="absolute top-1/4 -right-40 w-[500px] h-[500px] rounded-full opacity-0 dark:opacity-35"
-          style={{
-            background: 'radial-gradient(circle, rgba(156, 39, 176, 0.35) 0%, rgba(156, 39, 176, 0) 70%)',
-            filter: 'blur(80px)',
-          }}
-          animate={{
-            x: [0, -30, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        />
-
-        <motion.div
-          className="absolute bottom-0 left-1/3 w-[550px] h-[550px] rounded-full opacity-0 dark:opacity-30"
-          style={{
-            background: 'radial-gradient(circle, rgba(103, 58, 183, 0.3) 0%, rgba(103, 58, 183, 0) 70%)',
-            filter: 'blur(90px)',
-          }}
-          animate={{
-            x: [0, 40, 0],
-            y: [0, -40, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-
-        {/* Subtle Grid Pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-          style={{
-            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-            backgroundSize: '50px 50px',
-          }}
-        />
-      </div>
       {/* Theme Toggle - Fixed in top right, hides when navbar appears */}
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
@@ -201,224 +396,118 @@ export default function AnimatedHero() {
         <ThemeToggle />
       </motion.div>
 
-      {/* Premium Glassmorphism Overlay */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: animationStage >= 2 ? 1 : 0 }}
-        transition={{ duration: 1.5 }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        {/* Main Glass Layer */}
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%)',
-            backdropFilter: 'blur(60px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(60px) saturate(180%)',
-          }}
-          animate={{
-            background: [
-              'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%)',
-              'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%)',
-              'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%)',
-            ],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+      {/* Main Content - Split Layout with Better Alignment */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex-1 flex items-center min-h-0">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 lg:gap-16 xl:gap-20 items-start lg:items-center w-full py-6 md:py-8 lg:py-12 mb-20 md:mb-24 lg:mb-0">
+          {/* Left: Brand & CTA - Energetic & Fun Design */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left space-y-5 lg:space-y-6 order-1 lg:order-1"
+          >
+            {/* Brand Name - Bigger with 3D Effect */}
+            <motion.h1
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+              className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] leading-none font-black mb-6 md:mb-8"
+              style={{
+                fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                fontWeight: 900,
+                color: "#662D91",
+                letterSpacing: "-0.02em",
+                textShadow: `
+                  4px 4px 0px rgba(102, 45, 145, 0.2),
+                  8px 8px 0px rgba(102, 45, 145, 0.15),
+                  12px 12px 0px rgba(102, 45, 145, 0.1),
+                  0 0 30px rgba(102, 45, 145, 0.3)
+                `,
+                transform: "perspective(1000px) rotateX(2deg)",
+                transformStyle: "preserve-3d",
+              }}
+            >
+              qoupl
+            </motion.h1>
 
-        {/* Glass Reflection Light - Top */}
-        <div
-          className="absolute top-0 left-0 right-0 h-px opacity-40"
-          style={{
-            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8) 50%, transparent)',
-          }}
-        />
+            {/* Combined Taglines - Together, Small, Semi-Bold - Indented with Better Spacing */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="space-y-1 mb-6 md:mb-8 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
+            >
+              <p
+                className="text-base md:text-lg font-semibold text-foreground leading-relaxed"
+                style={{
+                  fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                Be <span className="text-[#662D91]">couple</span> with{" "}
+                <span className="text-[#662D91]">qoupl</span>
+              </p>
+              <p
+                className="text-base md:text-lg font-semibold text-muted-foreground leading-relaxed"
+                style={{
+                  fontFamily: "var(--font-poppins), system-ui, sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                Find your vibe. Match your energy. Connect for real.
+              </p>
+            </motion.div>
 
-        {/* Glass Reflection Light - Left */}
-        <div
-          className="absolute top-0 left-0 bottom-0 w-px opacity-30"
-          style={{
-            background: 'linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.6) 50%, transparent)',
-          }}
-        />
+            {/* CTA Button - Smaller Size - Indented with Better Spacing */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex flex-col items-center lg:items-start space-y-2 w-full mt-8 md:mt-10 lg:mt-12 pl-0 md:pl-4 lg:pl-8 xl:pl-12"
+            >
+              <Button
+                size="default"
+                onClick={() => setIsWaitlistModalOpen(true)}
+                className="group px-6 py-3 h-auto rounded-full bg-[#662D91] hover:bg-[#7a35a8] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
+                <Sparkles className="mr-2 h-4 w-4" />
+                Join the Waitlist
+                <span className="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                  Free
+                </span>
+              </Button>
+              <p className="text-xs text-muted-foreground text-center lg:text-left">
+                ⚡ Limited spots for early access
+              </p>
+            </motion.div>
 
-        {/* Ambient Color Overlay */}
-        <motion.div
-          className="absolute inset-0 opacity-20"
-          animate={{
-            background: [
-              'radial-gradient(circle at 30% 40%, rgba(255, 107, 129, 0.15), transparent 60%), radial-gradient(circle at 70% 60%, rgba(165, 89, 209, 0.12), transparent 60%)',
-              'radial-gradient(circle at 35% 45%, rgba(255, 107, 129, 0.12), transparent 60%), radial-gradient(circle at 65% 55%, rgba(165, 89, 209, 0.15), transparent 60%)',
-              'radial-gradient(circle at 30% 40%, rgba(255, 107, 129, 0.15), transparent 60%), radial-gradient(circle at 70% 60%, rgba(165, 89, 209, 0.12), transparent 60%)',
-            ],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+          </motion.div>
 
-        {/* Dark Mode Glass Override */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/3 to-white/0 dark:from-white/8 dark:to-white/0" />
-      </motion.div>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <AnimatePresence>
-            {animationStage >= 2 && (
-              <>
-                {/* Brand Name with Indian Theme */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                  className="mb-8"
-                >
-                  <h1 className="text-8xl md:text-9xl lg:text-[12rem] font-bold mb-4 relative">
-                    <span
-                      className="relative inline-block text-[#a855f7] dark:text-[#c084fc]"
-                      style={{
-                        filter: 'drop-shadow(0 2px 8px rgba(168, 85, 247, 0.25))',
-                      }}
-                    >
-                      qoupl
-                    </span>
-                  </h1>
-
-                  {/* Animated Hearts */}
-                  <div className="flex justify-center gap-2 mb-6">
-                    {[0, 1, 2].map((i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{
-                          delay: 0.1 + i * 0.05,
-                          type: "spring",
-                          stiffness: 200,
-                        }}
-                      >
-                        <Heart className="h-8 w-8 text-primary fill-primary" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* Tagline */}
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                  className="text-xl md:text-2xl lg:text-3xl mb-10 font-bold"
-                >
-                  <span className="text-gray-800 dark:text-gray-200">Be </span>
-                  <span className="text-[#a855f7] dark:text-[#c084fc]">couple</span>
-                  <span className="text-gray-800 dark:text-gray-200"> with </span>
-                  <span className="text-[#a855f7] dark:text-[#c084fc]">qoupl</span>
-                </motion.p>
-
-                {/* CTA Button - Redesigned */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.4 }}
-                  className="flex flex-col items-center justify-center"
-                >
-                  <Button
-                    size="lg"
-                    onClick={() => setIsWaitlistModalOpen(true)}
-                    className="text-base px-8 py-4 h-auto rounded-full shadow-lg hover:shadow-xl transition-all duration-300 bg-primary hover:bg-primary/90 transform hover:scale-105"
-                  >
-                    <Sparkles className="mr-2 h-5 w-5 animate-pulse" />
-                    Join the Waitlist
-                    <span className="ml-2 text-xs bg-white/20 px-2.5 py-0.5 rounded-full">
-                      Free
-                    </span>
-                  </Button>
-                  <p className="mt-3 text-sm text-foreground/50">
-                    ⚡ Limited spots available for early access
-                  </p>
-                </motion.div>
-
-                {/* Social Proof */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.4 }}
-                  className="mt-12 flex items-center justify-center gap-6 text-sm text-muted-foreground"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex -space-x-2">
-                      {[
-                        "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
-                        "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
-                        "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
-                        "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
-                      ].map((img, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 0.5 + i * 0.05, type: "spring" }}
-                          className="w-12 h-12 rounded-full border-2 border-background overflow-hidden relative"
-                        >
-                          <Image
-                            src={img}
-                            alt="User"
-                            fill
-                            className="object-cover"
-                            sizes="48px"
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                    <span className="font-semibold text-base">
-                      10,000+ Waiting for Launch
-                    </span>
-                  </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+          {/* Right: Modern Floating Cards - Swapped to Right Side */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex items-center justify-center lg:justify-end order-2 lg:order-2 w-full mt-4 md:mt-6 lg:mt-0 lg:-mt-16"
+          >
+            <ModernFloatingCards />
+          </motion.div>
         </div>
       </div>
 
-      {/* Floating Particles */}
-      {animationStage >= 3 && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute"
-              initial={{
-                x: Math.random() * window.innerWidth,
-                y: window.innerHeight + 100,
-              }}
-              animate={{
-                y: -100,
-                x: Math.random() * window.innerWidth,
-              }}
-              transition={{
-                duration: Math.random() * 10 + 10,
-                repeat: Infinity,
-                ease: "linear",
-                delay: Math.random() * 5,
-              }}
-            >
-              <Heart
-                className="text-primary/20"
-                size={Math.random() * 15 + 10}
-              />
-            </motion.div>
-          ))}
-        </div>
-      )}
+      {/* Infinite Circular Carousel - Full Width at Bottom */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="w-full absolute bottom-0 left-0 right-0 pb-4 md:pb-6 z-10"
+      >
+        <InfiniteCircularCarousel />
+        {/* Text below carousel */}
+        <p className="text-center mt-1 text-xs md:text-sm text-muted-foreground">
+          <span className="font-bold text-foreground">10,000+ people</span> already on the waitlist
+        </p>
+      </motion.div>
 
       {/* Waitlist Modal */}
       <WaitlistModal

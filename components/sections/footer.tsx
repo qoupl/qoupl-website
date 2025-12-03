@@ -1,6 +1,6 @@
 "use client";
 
-import { Twitter, Instagram, Facebook, Linkedin } from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,28 +28,20 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               <Link
-                href="#"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Instagram className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
+                href="https://www.linkedin.com/company/qoupl-ai/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Linkedin className="h-5 w-5" />
+              </Link>
+              <Link
+                href="https://www.instagram.com/qoupl.ai?igsh=MWI1bDFqOHplYzY1Nw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
               </Link>
             </div>
           </div>

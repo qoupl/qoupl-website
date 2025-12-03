@@ -8,28 +8,6 @@ interface SplashScreenProps {
   onComplete: () => void;
 }
 
-// Women images from the women folder
-const womenImages = [
-  "/images/women/rafaella-mendes-diniz-AoL-mVxprmk-unsplash.jpg",
-  "/images/women/caique-nascimento-Ij24Uq1sMwM-unsplash.jpg",
-  "/images/women/Gemini_Generated_Image_1hrhq01hrhq01hrh.png",
-  "/images/women/Gemini_Generated_Image_34su0h34su0h34su.png",
-  "/images/women/Gemini_Generated_Image_6cx31l6cx31l6cx3.png",
-  "/images/women/Gemini_Generated_Image_civ506civ506civ5.png",
-  "/images/women/Gemini_Generated_Image_fe6txtfe6txtfe6t.png",
-  "/images/women/Gemini_Generated_Image_l957byl957byl957.png",
-];
-
-// Men images from the men folder
-const menImages = [
-  "/images/men/amir-esrafili-eWa7clMsowo-unsplash.jpg",
-  "/images/men/arrul-lin-sYhUhse5uT8-unsplash.jpg",
-  "/images/men/dollar-gill-LmtUqlYRJO4-unsplash.jpg",
-  "/images/men/indian-student-goes-first-lesson.jpg",
-  "/images/men/medium-shot-man-with-paperwork.jpg",
-  "/images/men/mitchell-luo-ymo_yC_N_2o-unsplash.jpg",
-];
-
 export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [fillProgress, setFillProgress] = useState(0);
 
@@ -68,76 +46,69 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-white overflow-hidden"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #f5f3ff 0%, #faf5ff 25%, #fff 50%, #fdf4ff 75%, #faf5ff 100%)',
+      }}
     >
-      {/* Left Half - Women with Smooth Crossfade - HIDDEN ON MOBILE/TABLET */}
-      <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-1/2 overflow-hidden">
-        {womenImages.map((image, index) => (
-          <motion.div
-            key={`woman-${index}`}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: [0, 0, 0.7, 0.7, 0, 0],
-            }}
-            transition={{
-              duration: 3,
-              delay: index * 0.4,
-              repeat: Infinity,
-              repeatDelay: (womenImages.length - 1) * 0.4,
-              ease: "easeInOut",
-            }}
-          >
-            <Image
-              src={image}
-              alt={`Woman ${index + 1}`}
-              fill
-              className="object-cover"
-              sizes="50vw"
-            />
-            {/* Gradient fade to center */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-white" />
-            {/* Subtle color overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent" />
-          </motion.div>
-        ))}
+      {/* 3D Geometric Pattern Background */}
+      <div className="absolute inset-0 opacity-30">
+        {/* Grid pattern */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+          }}
+        />
+
+        {/* Diagonal lines for 3D effect */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(236, 72, 153, 0.02) 40px, rgba(236, 72, 153, 0.02) 80px),
+              repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(168, 85, 247, 0.02) 40px, rgba(168, 85, 247, 0.02) 80px)
+            `,
+          }}
+        />
       </div>
 
-      {/* Right Half - Men with Smooth Crossfade - HIDDEN ON MOBILE/TABLET */}
-      <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-1/2 overflow-hidden">
-        {menImages.map((image, index) => (
-          <motion.div
-            key={`man-${index}`}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: [0, 0, 0.7, 0.7, 0, 0],
-            }}
-            transition={{
-              duration: 3,
-              delay: index * 0.4,
-              repeat: Infinity,
-              repeatDelay: (menImages.length - 1) * 0.4,
-              ease: "easeInOut",
-            }}
-          >
-            <Image
-              src={image}
-              alt={`Man ${index + 1}`}
-              fill
-              className="object-cover"
-              sizes="50vw"
-            />
-            {/* Gradient fade to center */}
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-white" />
-            {/* Subtle color overlay */}
-            <div className="absolute inset-0 bg-gradient-to-bl from-purple-500/5 to-transparent" />
-          </motion.div>
-        ))}
-      </div>
+      {/* Animated floating orbs for depth */}
+      <motion.div
+        animate={{
+          x: [0, 100, 0],
+          y: [0, -50, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-20 left-20 w-96 h-96 rounded-full opacity-20 blur-3xl"
+        style={{
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%)',
+        }}
+      />
 
-      {/* Center White Fade Overlay - Creates clean separation - HIDDEN ON MOBILE/TABLET */}
-      <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent pointer-events-none" />
+      <motion.div
+        animate={{
+          x: [0, -80, 0],
+          y: [0, 60, 0],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-20 right-20 w-80 h-80 rounded-full opacity-20 blur-3xl"
+        style={{
+          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
+        }}
+      />
 
       {/* Logo Container - Much Bigger */}
       <div className="relative w-[600px] h-[300px] max-w-[90vw] z-10">
@@ -173,7 +144,6 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           <motion.div
             className="relative w-full h-full"
             style={{
-              // Changed to fill from bottom to top
               clipPath: `inset(${100 - fillProgress}% 0 0 0)`,
               transition: 'clip-path 0.04s ease-out',
             }}
@@ -189,30 +159,6 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             </div>
           </motion.div>
         </motion.div>
-
-        {/* Subtle wave/ripple effect as it fills */}
-        <motion.div
-          initial={{ y: '100%', opacity: 0 }}
-          animate={{
-            y: `${100 - fillProgress}%`,
-            opacity: fillProgress > 10 && fillProgress < 95 ? 0.4 : 0
-          }}
-          transition={{ duration: 0.05 }}
-          className="absolute inset-0 h-8 bg-gradient-to-b from-white/40 to-transparent blur-sm"
-        />
-
-        {/* Subtle shimmer effect overlay */}
-        <motion.div
-          initial={{ y: '100%' }}
-          animate={{ y: '-100%' }}
-          transition={{
-            duration: 2.5,
-            ease: "easeInOut",
-            delay: 0.4,
-          }}
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-transparent"
-          style={{ mixBlendMode: 'overlay' }}
-        />
       </div>
 
       {/* Subtle glow effect behind logo when filled */}
