@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Safety & Security - Your Protection Matters',
-  description: 'qoupl prioritizes your safety with photo verification, ID verification, end-to-end encryption, 24/7 moderation, and reporting tools. Safe dating experience guaranteed.',
-  keywords: ['dating app safety', 'secure dating', 'verified profiles', 'safe online dating', 'dating security'],
+  title: 'Safety & Security - Protection for College Students',
+  description: 'qoupl prioritizes college student safety with photo verification, student ID verification, end-to-end encryption, 24/7 moderation, and reporting tools. Safe campus dating for students aged 18-25.',
+  keywords: ['college dating safety', 'student dating security', 'verified student profiles', 'safe campus dating', 'college student protection', 'university dating security'],
   openGraph: {
-    title: 'qoupl Safety & Security - Your Protection Matters',
-    description: 'qoupl prioritizes your safety with photo verification, ID verification, and 24/7 moderation.',
+    title: 'qoupl Safety & Security - Protection for College Students',
+    description: 'qoupl prioritizes college student safety with photo verification, student ID verification, and 24/7 moderation for safe campus dating.',
     type: 'website',
     url: 'https://qoupl.ai/safety',
   },

@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog - Dating Tips, Relationship Advice & Updates',
-  description: 'Read the qoupl blog for dating tips, relationship advice, app updates, and insights on modern dating. Expert guidance for finding and maintaining meaningful connections.',
-  keywords: ['dating blog', 'relationship advice', 'dating tips', 'love advice', 'modern dating'],
+  title: 'Blog - College Dating Tips & Relationship Advice',
+  description: 'Read the qoupl blog for college dating tips, student relationship advice, campus dating insights, and app updates. Expert guidance for college students aged 18-25 to be couple with qoupl.',
+  keywords: ['college dating blog', 'student relationship advice', 'campus dating tips', 'college love advice', 'university dating', 'student couples'],
   openGraph: {
-    title: 'qoupl Blog - Dating Tips, Relationship Advice & Updates',
-    description: 'Read the qoupl blog for dating tips, relationship advice, and insights on modern dating.',
+    title: 'qoupl Blog - College Dating Tips & Student Relationship Advice',
+    description: 'Read the qoupl blog for college dating tips, student relationship advice, and campus dating insights.',
     type: 'website',
     url: 'https://qoupl.ai/blog',
   },

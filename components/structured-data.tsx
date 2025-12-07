@@ -18,10 +18,10 @@ export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'qoupl',
-  alternateName: 'qoupl Dating App',
+  alternateName: ['qoupl Dating App', 'coupl', 'couple', 'qouple', 'qoupl app', 'college dating app qoupl'],
   url: 'https://qoupl.ai',
   logo: 'https://qoupl.ai/images/quoupl.svg',
-  description: 'qoupl is a next-generation dating app that helps you find genuine connections through AI-powered matching and verified profiles.',
+  description: 'qoupl (also known as coupl, couple, qouple) - Be couple with qoupl. The exclusive dating and matchmaking app for college students and university students aged 18-25. Find your perfect match, boyfriend, or girlfriend on campus through AI-powered matching, verified student profiles, and safe campus dating. Best college dating app for students.',
   foundingDate: '2024',
   sameAs: [
     'https://twitter.com/qoupl',
@@ -42,8 +42,9 @@ export const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'qoupl',
+  alternateName: ['coupl', 'couple', 'qouple'],
   url: 'https://qoupl.ai',
-  description: 'Find your perfect match with qoupl - the modern dating app',
+  description: 'Be couple with qoupl - The exclusive dating and matchmaking app for college students and university students aged 18-25. Find your boyfriend, girlfriend, or perfect match on campus.',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
@@ -59,6 +60,7 @@ export const webApplicationSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'qoupl',
+  alternateName: ['coupl', 'couple', 'qouple', 'qoupl app'],
   applicationCategory: 'LifestyleApplication',
   operatingSystem: 'iOS, Android, Web',
   offers: {
@@ -71,7 +73,7 @@ export const webApplicationSchema = {
     ratingValue: '4.8',
     ratingCount: '10000',
   },
-  description: 'qoupl is the next generation dating app with AI-powered matching, verified profiles, and safe dating experience.',
+  description: 'qoupl (also known as coupl, couple, qouple) - Be couple with qoupl. The exclusive dating and matchmaking app for college students and university students aged 18-25. Best college dating app with AI-powered matching, verified student profiles, and safe campus dating experience. Find your boyfriend, girlfriend, or perfect match on campus.',
 };
 
 // FAQ Schema Generator

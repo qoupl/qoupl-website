@@ -2,11 +2,11 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'FAQ - Frequently Asked Questions',
-  description: 'Get answers to common questions about qoupl dating app. Learn about features, pricing, safety, account management, and more. Find everything you need to know.',
-  keywords: ['qoupl FAQ', 'dating app questions', 'help', 'support', 'how to use qoupl'],
+  description: 'Get answers to common questions about qoupl, the dating app for college students aged 18-25. Learn about features, pricing, safety, student verification, and more. Be couple with qoupl.',
+  keywords: ['qoupl FAQ', 'college dating app questions', 'student dating help', 'campus dating support', 'how to use qoupl', 'couple', 'coupl', 'qouple'],
   openGraph: {
-    title: 'qoupl FAQ - Frequently Asked Questions',
-    description: 'Get answers to common questions about qoupl dating app.',
+    title: 'qoupl FAQ - College Dating App Questions',
+    description: 'Get answers to common questions about qoupl dating app for college students.',
     type: 'website',
     url: 'https://qoupl.ai/faq',
   },
